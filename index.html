@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="uk"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#061019">
+<title>AI-Money Club · Розпакуй проєкт → відеопереказ у Gemini Notebook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#061019;
+  --surface:rgba(255,255,255,.042);
+  --mint:#2fe3d0;
+  --lime:#c9e88c;
+  --gold:#efc35f;
+  --gold-hi:#ffdd94;
+  --coral:#d9795a;
+  --coral-hi:#e89a7a;
+  --text:#f2f8fc;
+  --muted:#93aabb;
+  --line:rgba(255,255,255,.1);
+  --line-2:rgba(255,255,255,.18);
+  --display:"Montserrat",system-ui,sans-serif;
+  --body:"Manrope",system-ui,sans-serif;
+  --mono:ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+  --u:clamp(13px, 1.05vw, 18px);
+  --pad-x:clamp(20px, 6vw, 96px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{scroll-behavior:smooth;color-scheme:dark}
+body{
+  background:#061019;color:var(--text);font-family:var(--body);
+  -webkit-font-smoothing:antialiased;font-size:calc(var(--u)*1.15);line-height:1.6;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60rem 40rem at 8% -8%, rgba(47,227,208,.14), transparent 60%),
+    radial-gradient(ellipse 50rem 38rem at 100% 6%, rgba(239,195,95,.08), transparent 60%),
+    #061019;
+}
+.wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:clamp(48px,8vh,88px) var(--pad-x) 120px}
+.sprite{position:absolute;width:0;height:0;overflow:hidden}
+.ico{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* progress rail */
+.progress{position:fixed;inset:0 0 auto 0;height:3px;z-index:40;background:rgba(255,255,255,.07)}
+.progress__bar{height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--lime),var(--gold));transition:width .12s linear}
+
+/* eyebrow / headings */
+.eyebrow{display:inline-flex;align-items:center;gap:.55em;padding:.5em 1.05em;border-radius:99px;border:1px solid rgba(47,227,208,.44);background:rgba(47,227,208,.08);color:var(--mint);font:800 calc(var(--u)*.82)/1 var(--body);letter-spacing:.16em;text-transform:uppercase}
+.eyebrow--gold{border-color:rgba(239,195,95,.46);background:rgba(239,195,95,.09);color:var(--gold)}
+.eyebrow svg{width:1.15em;height:1.15em}
+
+h1{font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:.98;font-size:clamp(32px,5.4vw,54px);margin:.5em 0 0}
+h2{font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:1;font-size:clamp(24px,3.4vw,34px);margin:0 0 .2em}
+h3{font-family:var(--display);font-weight:800;font-size:calc(var(--u)*1.28);line-height:1.2;margin:0 0 .35em;letter-spacing:-.008em}
+.grad{background:linear-gradient(96deg,#fff 0%,#fff 30%,var(--mint) 64%,var(--lime) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad-gold{background:linear-gradient(96deg,#fff 0%,#fff 28%,var(--gold) 64%,var(--gold-hi) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:calc(var(--u)*1.32);line-height:1.55;color:#d3e2ef;max-width:64ch;margin:.9em 0 0}
+p{margin:0 0 1em}
+.muted{color:var(--muted)}
+.link{color:var(--mint);font-weight:700;text-decoration:none;border-bottom:1px solid rgba(47,227,208,.45);transition:.2s}
+.link:hover{border-bottom-color:var(--mint)}
+
+hr.rule{border:0;border-top:1px solid var(--line);margin:clamp(48px,7vh,72px) 0}
+
+section{margin-top:clamp(52px,8vh,84px)}
+section:first-of-type{margin-top:0}
+.head{display:flex;flex-direction:column;align-items:flex-start;gap:.75em;margin-bottom:clamp(24px,4vh,36px)}
+
+/* note */
+.note{display:flex;gap:.9em;align-items:flex-start;padding:1.05em 1.3em;border-radius:1em;border:1px solid rgba(47,227,208,.3);background:rgba(47,227,208,.06);font-size:calc(var(--u)*1.04);line-height:1.5}
+.note svg{flex:none;width:1.5em;height:1.5em;color:var(--mint);margin-top:.1em}
+.note b{color:var(--mint)}
+.note--gold{border-color:rgba(239,195,95,.32);background:rgba(239,195,95,.06)}
+.note--gold svg,.note--gold b{color:var(--gold)}
+
+/* steps */
+.steps{display:flex;flex-direction:column;gap:14px;margin:0;padding:0;list-style:none}
+.step{display:flex;gap:1.1em;align-items:flex-start;padding:1.3em 1.5em;border:1px solid var(--line);border-radius:1.15em;background:var(--surface)}
+.step__n{flex:none;display:grid;place-items:center;width:2.5em;height:2.5em;border-radius:.8em;background:rgba(47,227,208,.14);border:1px solid rgba(47,227,208,.4);color:var(--mint);font:900 calc(var(--u)*1.1) var(--display)}
+.step__body h3{margin-bottom:.3em}
+.step__body p{color:#dceaf5;font-size:calc(var(--u)*1.02);margin:0}
+.step__body ul{margin:.6em 0 0;padding-left:1.15em}
+.step__body li{margin:.35em 0;color:#c7d8e6;font-size:calc(var(--u)*.98)}
+.step__body li b{color:var(--mint);font-weight:700}
+
+/* prompt box */
+.prompt{border:1px solid rgba(47,227,208,.45);border-radius:1.15em;overflow:hidden;background:rgba(2,9,15,.68)}
+.prompt__head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:.85em 1.3em;background:rgba(47,227,208,.09);border-bottom:1px solid var(--line)}
+.prompt__head b{font:800 calc(var(--u)*.82) var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--mint)}
+.btn{border:1px solid var(--line-2);border-radius:11px;background:rgba(255,255,255,.08);color:var(--text);padding:.55em 1.05em;font:800 calc(var(--u)*.92) var(--body);cursor:pointer;transition:.2s;white-space:nowrap}
+.btn:hover{background:rgba(47,227,208,.18);border-color:rgba(47,227,208,.5)}
+.btn.is-done{background:var(--mint);color:#03080d;border-color:var(--mint)}
+.prompt__text{margin:0;padding:1.3em 1.4em;white-space:pre-wrap;font:500 calc(var(--u)*.94)/1.62 var(--mono);color:#e8f6ff;max-height:62vh;overflow:auto}
+
+/* footer */
+.footer{margin-top:clamp(56px,9vh,90px);padding-top:1.6em;border-top:1px solid var(--line);color:var(--muted);font-size:calc(var(--u)*.92);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (max-width:640px){
+  .wrap{padding:40px 18px 80px}
+  .step{padding:1.1em 1.1em}
+  .prompt__text{max-height:52vh}
+}
+</style>
+</head>
+<body>
+
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"></path><path d="M14 3v5h5M9 13h6M9 17h4"></path></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"></path><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5.9 1.2.9 1.9v.2h5.2v-.2c0-.7.3-1.4.9-1.9A6 6 0 0 0 12 3Z"></path></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"></circle><circle cx="12" cy="12" r="4.5"></circle><circle cx="12" cy="12" r=".8" fill="currentColor"></circle></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 4.3 2.6 17.5A2 2 0 0 0 4.3 20.5h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z"></path><path d="M12 9.5v4M12 17h.01"></path></symbol>
+</svg>
+
+<div class="progress"><div class="progress__bar" id="bar"></div></div>
+
+<div class="wrap">
+
+  <section>
+    <div class="eyebrow"><svg class="ico"><use href="#i-doc"></use></svg> Інструкція + промпт</div>
+    <h1>Розпакуй проєкт → <span class="grad">відеопереказ</span> у Gemini Notebook</h1>
+    <p class="lead">Покроковий гайд: спочатку проходиш брифування за готовим промптом, отримуєш два тексти — бриф-джерело і стильовий запит, — і вставляєш їх у Gemini Notebook (NotebookLM), щоб згенерувати відеоогляд проєкту.</p>
+  </section>
+
+  <section>
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-target"></use></svg> Інструкція</div>
+      <h2>Як це <span class="grad">зробити</span></h2>
+    </div>
+    <ol class="steps">
+      <li class="step">
+        <div class="step__n">1</div>
+        <div class="step__body">
+          <h3>Пройди брифування</h3>
+          <p>Встав промт нижче в чат (Claude, ChatGPT чи інший) і відповідай на запитання. Отримаєш два готові тексти: <b style="color:var(--mint)">бриф-джерело</b> (опис проєкту) і <b style="color:var(--mint)">стильовий запит</b> (налаштування відео).</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step__n">2</div>
+        <div class="step__body">
+          <h3>Відкрий Gemini Notebook</h3>
+          <p>Перейди на <a href="https://notebooklm.google.com" target="_blank" rel="noopener" class="link">notebooklm.google.com</a> → створи новий блокнот (або відкрий наявний).</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step__n">3</div>
+        <div class="step__body">
+          <h3>Додай бриф як джерело</h3>
+          <p>«Джерела» → «Додати джерела» → встав бриф-джерело з Кроку 1 як текст (можна просто вставити текст напряму, без файлу).</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step__n">4</div>
+        <div class="step__body">
+          <h3>Створи відеоогляд</h3>
+          <p>У панелі «Студія» обери <b style="color:var(--mint)">«Відеоогляд»</b> (Video Overview) → натисни значок олівця для налаштувань і встанови:</p>
+          <ul>
+            <li><b>Формат</b> — Explainer (повний огляд) / Brief (коротка версія) / Cinematic (кінематографічна історія, доступно з 18 років)</li>
+            <li><b>Мова</b> озвучки</li>
+            <li><b>Візуальний стиль</b> — Classic, Whiteboard, Watercolor, Retro Print, Heritage, Paper-craft, Kawaii, Anime або Custom (свій опис стилю текстом) — обери за відповіддю зі стильового запиту з Кроку 1</li>
+            <li><b>Steering prompt</b> (на що фокусуватись) — встав стильовий запит з Кроку 1 сюди</li>
+          </ul>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step__n">5</div>
+        <div class="step__body">
+          <h3>Натисни «Створити» і зачекай</h3>
+          <p>Генерація відео може тривати до 30+ хвилин — можна закрити вкладку й повернутись пізніше.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <hr class="rule">
+
+  <section>
+    <div class="head">
+      <div class="eyebrow eyebrow--gold"><svg class="ico"><use href="#i-bulb"></use></svg> Промпт для Кроку 1</div>
+      <h2>Промпт для <span class="grad-gold">брифування</span></h2>
+      <p class="lead">Скопіюй увесь текст нижче і встав у чат з Claude, ChatGPT чи іншим AI — він поставить запитання блоками і в кінці видасть готовий бриф-джерело та стильовий запит.</p>
+    </div>
+
+    <div class="prompt">
+      <div class="prompt__head">
+        <b>Промпт · брифування проєкту</b>
+        <button class="btn js-copy" type="button">Копіювати</button>
+      </div>
+      <pre class="prompt__text">## РОЛЬ
+
+Ти — досвідчений бізнес-аналітик рівня McKinsey, який розпаковує проєкт чи бізнес людини в структурований бриф, готовий стати джерелом для AI-згенерованого відеоогляду — без домислювання того, чого людина не сказала.
+
+## ПОРЯДОК РОБОТИ
+
+Постав запитання двома блоками, по одному питанню за раз.
+
+**Блок А — про сам проєкт/бізнес:**
+1. Чим займається проєкт/бізнес — суть в кількох реченнях
+2. Для кого це — цільова аудиторія
+3. Яку проблему вирішує чи яку цінність дає
+4. Ключові факти/цифри/досягнення, які варто підкреслити (досвід, результати клієнтів, цифри)
+5. Що робить проєкт унікальним серед подібних
+6. Навіщо створюється саме це відео — кому його покажуть і яку дію воно має викликати
+
+**Блок Б — гачок і драматургія (обов'язково — без цього відео вийде сухим переказом фактів, а не історією, яку цікаво дивитись):**
+7. Яка головна несподіванка чи провокаційна теза має зачепити глядача в перші секунди — розвінчаний міф, неочікувана цифра, гостре питання «а ви знали, що...»
+8. Одна конкретна історія чи приклад — шлях реальної людини/клієнта від проблеми до результату, з деталями, а не узагальнено («Марина витрачала 3 години на пошук клієнтів, а через місяць отримала перше замовлення на AI-сайт» краще за «наші учасники заробляють»)
+9. У що глядач вірить зараз помилково, і в що він має повірити до кінця відео — яка зміна переконання відбувається
+10. Яка емоція веде сюжет — цікавість, страх втратити можливість, натхнення, азарт, полегшення
+
+**Блок В — про стиль майбутнього відео (обов'язково, без цього блоку відео вийде довільним):**
+11. Формат — повний детальний огляд, коротка версія чи кінематографічна історія?
+12. Візуальний стиль — обери з готових (класичний / whiteboard-замальовки / акварель / ретро-друк / спадщина-стиль / паперове ремесло / kawaii / аніме) чи опиши власний стиль словами
+13. Тон озвучки — енергійний, спокійний, експертний, дружній, натхненний?
+14. Мова озвучки
+15. На чому конкретно зробити акцент у відео (steering prompt) — головна теза, яку глядач має запам'ятати найбільше
+
+Якщо на якесь питання відповіді не дали — постав уточнення, не пропускай мовчки і не вигадуй за людину. Якщо людина не має конкретного прикладу/історії для питання 8 — попроси її вигадати правдоподібний, типовий сценарій і прямо познач його як ілюстративний приклад, а не реальний кейс.
+
+## ФОРМАТ ВІДПОВІДІ
+
+Після всіх відповідей видай два окремі готові тексти:
+
+=== БРИФ-ДЖЕРЕЛО (встав у Notebook як джерело) ===
+[зв'язний текст, побудований як міні-історія, а не довідка:
+1. Відкривається гачком з питання 7 (несподіванка/провокаційна теза)
+2. Далі — суть проєкту, аудиторія, цінність і ключові факти з Блоку А
+3. У середину вплетена конкретна історія/приклад з питання 8 — не окремим абзацем «до речі, ось приклад»,
+   а як природна ілюстрація сказаного
+4. Завершується тим, у що глядач має повірити до кінця (питання 9) і що робить проєкт унікальним]
+
+=== СТИЛЬОВИЙ ЗАПИТ (встав у Steering prompt при налаштуванні відео) ===
+Формат: [...]
+Візуальний стиль: [...]
+Тон озвучки: [...]
+Мова: [...]
+Емоція, що веде сюжет: [з питання 10]
+Фокус: [конкретна теза з питання 15]
+
+## ПРАВИЛА
+
+- Нічого не додумуй понад те, що людина сказала — якщо факт чи цифра не прозвучали, не вигадуй їх у бриф-джерелі
+- Виняток — ілюстративний приклад із питання 8: якщо людина сама попросила його вигадати, він допустимий, але завжди позначається в брифі як приклад («уявімо ситуацію...»), а не як реальний кейс
+- Блок В обов'язковий завжди — без нього Notebook сам обере стиль автоматично, і результат може не відповідати цілі відео
+- Блок Б обов'язковий так само — джерело без гачка й історії AI спакує в сухий інформаційний переказ, а не в цікаве відео
+- Бриф-джерело — природний зв'язний текст із драматургією (гачок → розкриття → приклад → висновок), а не список пунктів</pre>
+    </div>
+
+    <div class="note" style="margin-top:20px">
+      <svg class="ico"><use href="#i-alert"></use></svg>
+      <div>Промпт не вигадує факти за тебе — якщо на якесь питання бракує відповіді, він перепитає. Для питання про історію/приклад можна попросити AI придумати правдоподібний сценарій, але в брифі він завжди буде позначений як ілюстративний, а не реальний.</div>
+    </div>
+  </section>
+
+
+</div>
+
+<script>
+(function(){
+  var bar=document.getElementById('bar');
+  function onScroll(){
+    var max=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=(max>0?Math.min(100,window.scrollY/max*100):0)+'%';
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll);
+  onScroll();
+
+  document.addEventListener('click',function(e){
+    if(!e.target.classList.contains('js-copy')) return;
+    var btn=e.target;
+    var text=btn.closest('.prompt').querySelector('.prompt__text').innerText.trim();
+    function done(){
+      var old=btn.textContent;
+      btn.textContent='Скопійовано ✓'; btn.classList.add('is-done');
+      setTimeout(function(){ btn.textContent=old; btn.classList.remove('is-done'); },1600);
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done,done);
+    } else { done(); }
+  });
+})();
+</script>
+
+</body></html>
