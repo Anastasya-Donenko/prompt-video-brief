@@ -279,26 +279,26 @@ section:first-of-type{margin-top:0}
 
 <script>
 // ──────────────────────────────────────────────
-// Встав сюди ID відео з YouTube (частина після ?v= або youtu.be/)
-// Наприклад: var VIDEO_ID = 'dQw4w9WgXcQ';
-var VIDEO_ID = 'OBAwGcJ_Bz4';
+// ID відео з Vimeo (число після vimeo.com/)
+// Наприклад: var VIMEO_ID = '1227686531';
+var VIMEO_ID = '1227686531';
 // ──────────────────────────────────────────────
 
 (function(){
   // Підставляємо відео, якщо ID є
   // Update play button label based on VIDEO_ID
   var label = document.getElementById('playLabel');
-  if(VIDEO_ID && label) label.textContent = 'Дивитись відео';
+  if(VIMEO_ID && label) label.textContent = 'Дивитись відео';
 
   // Click handler
   window.initVideo = function(){
-    if(!VIDEO_ID) return;
+    if(!VIMEO_ID) return;
     var wrap=document.getElementById('videoWrap');
     var ph=document.getElementById('videoPlaceholder');
     if(ph) ph.remove();
     var iframe=document.createElement('iframe');
-    iframe.src='https://www.youtube.com/embed/'+VIDEO_ID+'?rel=0&modestbranding=1&autoplay=1';
-    iframe.allow='accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';
+    iframe.src='https://player.vimeo.com/video/'+VIMEO_ID+'?autoplay=1&badge=0&autopause=0';
+    iframe.allow='autoplay;fullscreen;picture-in-picture';
     iframe.allowFullscreen=true;
     iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:0';
     wrap.appendChild(iframe);
